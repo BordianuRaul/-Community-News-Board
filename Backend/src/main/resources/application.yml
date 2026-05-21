@@ -1,18 +1,11 @@
 spring:
   application:
-    name: community-news-backend
+    name: community-news-board
 
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+cloud:
+  aws:
+    s3:
+      bucket: community-news-poze-2026
 
 aws:
-  region: us-east-1
-  s3:
-    bucket-name: community-news-images
-  dynamodb:
-    table-name: NewsPosts
-  sqs:
-    queue-url: https://sqs.us-east-1.amazonaws.com/000000000000/ImageResizeTaskQueue
-
+  region: eu-north-1
