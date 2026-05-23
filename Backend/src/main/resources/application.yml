@@ -9,3 +9,7 @@ cloud:
 
 aws:
   region: eu-north-1
+
+auth:
+  password:
+    algorithm: PBKDF2WithHmacSHA256
