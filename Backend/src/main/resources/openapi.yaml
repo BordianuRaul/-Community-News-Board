@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+  title: Community News Board API
+  description: API for posts, uploads, and simple auth.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              username: alice
+              password: secret123
+      responses:
+        '201':
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                userId: 9e7b0d2d-7d46-4f6e-9b0a-1a5a9a8d4e31
+                username: alice
+                createdAt: 2026-05-24T00:30:00Z
+                message: registered
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: alice
+              password: secret123
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              example:
+                userId: 9e7b0d2d-7d46-4f6e-9b0a-1a5a9a8d4e31
+                username: alice
+                createdAt: 2026-05-24T00:30:00Z
+                message: logged-in
+  /api/posts:
+    get:
+      tags:
+        - Posts
+      summary: List posts (newest first)
+      responses:
+        '200':
+          description: Posts list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+              example:
+                - postId: 3c2d1f9f-58a7-4a9a-9f0f-5f4d6b2f2f90
+                  timestamp: 2026-05-24T00:25:00Z
+                  headline: Campus cleanup this weekend
+                  body: Join us for a community cleanup on Saturday.
+                  originalImageUrl: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg
+                  thumbnailImageUrl: https://example-bucket.s3.amazonaws.com/thumbnails/cleanup_128.jpg
+                - postId: 1b2e6a3b-9d17-4c7a-9b0d-1b2c3d4e5f60
+                  timestamp: 2026-05-23T21:15:00Z
+                  headline: New library hours
+                  body: The library is open until 10 PM starting Monday.
+                  originalImageUrl: https://example-bucket.s3.amazonaws.com/originals/library.jpg
+                  thumbnailImageUrl: https://example-bucket.s3.amazonaws.com/thumbnails/library_128.jpg
+    post:
+      tags:
+        - Posts
+      summary: Create a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+            example:
+              headline: Campus cleanup this weekend
+              body: Join us for a community cleanup on Saturday.
+              imageKey: originals/cleanup.jpg
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              example:
+                postId: 3c2d1f9f-58a7-4a9a-9f0f-5f4d6b2f2f90
+                timestamp: 2026-05-24T00:25:00Z
+                headline: Campus cleanup this weekend
+                body: Join us for a community cleanup on Saturday.
+                originalImageUrl: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg
+                thumbnailImageUrl: https://example-bucket.s3.amazonaws.com/thumbnails/cleanup_128.jpg
+  /api/uploads/presign:
+    post:
+      tags:
+        - Uploads
+      summary: Create a presigned upload URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PresignRequest'
+            example:
+              filename: cleanup.jpg
+              contentType: image/jpeg
+      responses:
+        '201':
+          description: Presigned upload URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresignResponse'
+              example:
+                url: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg?X-Amz-Signature=...
+                key: originals/cleanup.jpg
+                method: PUT
+  /api/uploads/presign-get:
+    post:
+      tags:
+        - Uploads
+      summary: Create a presigned download URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PresignGetRequest'
+            example:
+              key: originals/cleanup.jpg
+      responses:
+        '201':
+          description: Presigned download URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresignResponse'
+              example:
+                url: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg?X-Amz-Signature=...
+                key: originals/cleanup.jpg
+                method: GET
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: alice
+        password:
+          type: string
+          example: secret123
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: alice
+        password:
+          type: string
+          example: secret123
+    AuthResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 9e7b0d2d-7d46-4f6e-9b0a-1a5a9a8d4e31
+        username:
+          type: string
+          example: alice
+        createdAt:
+          type: string
+          example: 2026-05-24T00:30:00Z
+        message:
+          type: string
+          example: registered
+    CreatePostRequest:
+      type: object
+      required:
+        - headline
+        - body
+      properties:
+        headline:
+          type: string
+          example: Campus cleanup this weekend
+        body:
+          type: string
+          example: Join us for a community cleanup on Saturday.
+        imageKey:
+          type: string
+          nullable: true
+          example: originals/cleanup.jpg
+    Post:
+      type: object
+      properties:
+        postId:
+          type: string
+          example: 3c2d1f9f-58a7-4a9a-9f0f-5f4d6b2f2f90
+        timestamp:
+          type: string
+          example: 2026-05-24T00:25:00Z
+        headline:
+          type: string
+          example: Campus cleanup this weekend
+        body:
+          type: string
+          example: Join us for a community cleanup on Saturday.
+        originalImageUrl:
+          type: string
+          example: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg
+        thumbnailImageUrl:
+          type: string
+          example: https://example-bucket.s3.amazonaws.com/thumbnails/cleanup_128.jpg
+    PresignRequest:
+      type: object
+      required:
+        - filename
+        - contentType
+      properties:
+        filename:
+          type: string
+          example: cleanup.jpg
+        contentType:
+          type: string
+          example: image/jpeg
+    PresignGetRequest:
+      type: object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          example: originals/cleanup.jpg
+    PresignResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://example-bucket.s3.amazonaws.com/originals/cleanup.jpg?X-Amz-Signature=...
+        key:
+          type: string
+          example: originals/cleanup.jpg
+        method:
+          type: string
+          example: PUT
+

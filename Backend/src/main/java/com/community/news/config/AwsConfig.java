@@ -1,5 +1,6 @@
 package com.community.news.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
@@ -14,7 +15,14 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 public class AwsConfig {
 
     private final DefaultCredentialsProvider credentialsProvider = DefaultCredentialsProvider.create();
-    private final Region region = Region.EU_NORTH_1;
+    private final Region region;
+
+    public AwsConfig(@Value("${aws.region}") String region) {
+        if (region == null || region.isBlank()) {
+            throw new IllegalStateException("aws.region must be set");
+        }
+        this.region = Region.of(region);
+    }
 
     @Bean
     public S3Client s3Client() {

@@ -8,7 +8,12 @@ cloud:
       bucket: community-news-poze-2026
 
 aws:
-  region: eu-north-1
+  region: eu-central-1
+  dynamodb:
+    auto-create-tables: true
+  sqs:
+    queue-name: ImageResizeTaskQueue
+    auto-create-queue: true
 
 auth:
   password:

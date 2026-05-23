@@ -16,8 +16,8 @@ public class PostRepository {
     private final DynamoDbTable<Post> postTable;
 
     public PostRepository(DynamoDbEnhancedClient enhancedClient) {
-        // Maps your "Post" Java class to the "NewsPosts" table in DynamoDB
-        this.postTable = enhancedClient.table("NewsPosts", TableSchema.fromBean(Post.class));
+        // Maps your "Post" Java class to the "Posts" table in DynamoDB
+        this.postTable = enhancedClient.table("Posts", TableSchema.fromBean(Post.class));
     }
 
     public void save(Post post) {
@@ -32,4 +32,3 @@ public class PostRepository {
                 .collect(Collectors.toList());
     }
 }
-

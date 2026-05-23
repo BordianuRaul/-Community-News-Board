@@ -14,11 +14,16 @@ public class SqsProducer {
 
     private final SqsClient sqsClient;
     private final ObjectMapper objectMapper;
-    private final String queueName = "ImageResizeTaskQueue";
+    private final String queueName;
 
-    public SqsProducer(SqsClient sqsClient, ObjectMapper objectMapper) {
+    public SqsProducer(SqsClient sqsClient, ObjectMapper objectMapper,
+                       @Value("${aws.sqs.queue-name}") String queueName) {
+        if (queueName == null || queueName.isBlank()) {
+            throw new IllegalStateException("aws.sqs.queue-name must be set");
+        }
         this.sqsClient = sqsClient;
         this.objectMapper = objectMapper;
+        this.queueName = queueName;
     }
 
     public void publishImageResizeEvent(ImageResizeEvent event) {
@@ -45,4 +50,3 @@ public class SqsProducer {
         }
     }
 }
-
