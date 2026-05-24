@@ -4,7 +4,7 @@
 Set these in the Lambda configuration:
 
 ```
-S3_BUCKET=community-news-poze-2026
+S3_BUCKET=gcc-community-news-2026
 DYNAMODB_TABLE=NewsPosts
 THUMBNAIL_SIZE=128
 THUMBNAIL_PREFIX=thumbnails/
@@ -28,4 +28,3 @@ Notes:
 The table uses:
 - Partition key: `postId`
 - Sort key: `timestamp`
-

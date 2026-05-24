@@ -4,7 +4,7 @@ This guide uses AWS CLI. Commands are in PowerShell.
 
 ## 1) Prerequisites
 - AWS CLI installed and configured (`aws configure`).
-- S3 bucket exists: `community-news-poze-2026` (or update `S3_BUCKET`).
+- S3 bucket exists: `gcc-community-news-2026` (or update `S3_BUCKET`).
 - DynamoDB table exists: `NewsPosts` (or update `DYNAMODB_TABLE`).
 - SQS queue exists: `ImageResizeTaskQueue`.
 
@@ -54,7 +54,7 @@ aws lambda create-function `
   --zip-file fileb://lambda_deployment.zip `
   --timeout 60 `
   --memory-size 512 `
-  --environment Variables={S3_BUCKET=community-news-poze-2026,DYNAMODB_TABLE=NewsPosts,THUMBNAIL_SIZE=128,THUMBNAIL_PREFIX=thumbnails/}
+  --environment Variables={S3_BUCKET=gcc-community-news-2026,DYNAMODB_TABLE=NewsPosts,THUMBNAIL_SIZE=128,THUMBNAIL_PREFIX=thumbnails/}
 ```
 
 ## 5) Connect SQS to Lambda
@@ -75,4 +75,3 @@ aws lambda get-function --function-name ImageResizeWorker
 aws lambda list-event-source-mappings --function-name ImageResizeWorker
 aws logs tail /aws/lambda/ImageResizeWorker --follow
 ```
-

@@ -1,7 +1,6 @@
 package com.community.news.repository;
 
 import com.community.news.model.Post;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
