@@ -29,7 +29,6 @@ Community News Board is a full-stack app where users register/login, post commun
 ### Run backend (Spring Boot)
 
 ```powershell
-Set-Location "C:\Users\bordi\Desktop\master\An I sem II\GCC\-Community-News-Board\Backend"
 mvn spring-boot:run
 ```
 
@@ -38,20 +37,18 @@ The API runs on `http://localhost:8080` and uses AWS SDK default credentials. Op
 ### Run frontend (React + Vite)
 
 ```powershell
-Set-Location "C:\Users\bordi\Desktop\master\An I sem II\GCC\-Community-News-Board\Frontend"
 npm install
 npm run dev
 ```
 
 Set the backend URL in `Frontend\.env`:
 ```
-VITE_API_BASE_URL=http://localhost:8080
+VITE_API_BASE_URL=http://localhost:5173
 ```
 
 ### Optional: Lambda local resize test
 
 ```powershell
-Set-Location "C:\Users\bordi\Desktop\master\An I sem II\GCC\-Community-News-Board\Backend\lambda"
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
